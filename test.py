@@ -1,7 +1,7 @@
+from lib.rocket_sv import RocketChatSV
 from sqlite.database import DatabaseManageer
+from lib.win_sv import WinServer
 
-# db = DatabaseManageer("users.db")
-# db.connect()
 
-with DatabaseManageer("users.db") as db:
-    db.delete_table("users")
+with WinServer() as win:
+    win.get_users()

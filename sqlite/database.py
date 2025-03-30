@@ -23,12 +23,34 @@ class DatabaseManageer():
             self.cursor.close()
             self.conn.close()
 
-    def add_user(self, username, first_name, last_name, email):
+    def update_user(self, username, fullname=None, email=None):
+        self.cursor.execute(f"")
+        pass
+
+    def add_user(self,
+                 ldap_username=None,
+                 ldap_fullname=None,
+                 ldap_email=None,
+                 rocket_username=None,
+                 rocket_fullname=None,
+                 rocket_email=None,
+                 win_username=None,
+                 win_fullname=None):
         """Add user to database in users table"""
 
-        if(username != "" and first_name != "" and last_name != "" and email !=""):
-            self.cursor.execute(f"")
-            self.conn.commit()
+        if(ldap_username is not None):
+            if(ldap_fullname is not None):
+                self.cursor.execute(f"""INSERT INTO users (ldap_usr, ldap_fn, ldap_email)
+                                    VALUES(?, ?, ?)""",(ldap_username, ldap_fullname, ldap_email))
+
+            if(rocket_username is not None):
+                if(rocket_fullname is not None and rocket_email is not None):
+                    self.cursor.execute(f"""INSERT INTO users (rc_usr, rc_fn, rc_email)
+                                        VALUES(?, ?, ?)""",(rocket_username,rocket_fullname,rocket_email))
+                self.conn.commit()
+        # if(username != "" and fullname != "" and email !=""):
+        #     self.cursor.execute(f"")
+        #     self.conn.commit()
 
     def create_table(self):
         """Create table in database users.db"""
@@ -38,12 +60,30 @@ class DatabaseManageer():
 
         query = f"""CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        first_name TEXT NOT NULL,
-        last_name TEXT NOT NULL,
-        email TEXT NOT NULL)"""
+        ldap_usr TEXT,
+        ldap_fn TEXT,
+        ldap_email TEXT,
+        rc_usr TEXT,
+        rc_fn TEXT,
+        rc_email TEXT,
+        win_usr TEXT,
+        win_fn TEXT,
+        date_added DATETIME DEFAULT CURRENT_TIMESTAMP,
+        date_modified DATETIME DEFAULT CURRENT_TIMESTAMP)"""
+
+        create_trigger_query = f"""
+        CREATE TRIGGER IF NOT EXISTS update_date_modified
+        AFTER UPDATE ON users
+        FOR EACH ROW
+        BEGIN
+            UPDATE users
+            SET date_modified = CURRENT_TIMESTAMP
+            WHERE ID = OLD.id;
+        END
+        """
 
         self.cursor.execute(query)
+        self.cursor.execute(create_trigger_query)
         self.conn.commit()
 
     def fetch_all_users(self):
@@ -54,6 +94,7 @@ class DatabaseManageer():
         return users_list
 
     def delete_table(self, table_name):
+        """Deletes table if it exists"""
         self.cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
         self.conn.commit()
         
