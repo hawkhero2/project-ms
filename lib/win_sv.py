@@ -11,6 +11,7 @@ class WinServer():
         self.env = ENV()
         self.ssh = None
 
+
     def get_usernames(self):
         """
         Runs a "net user" command and formats the output received from the Win Server\n
@@ -32,19 +33,34 @@ class WinServer():
         
         return usrs
 
+
     def get_users(self):
         """
         Goes through the list of usernames present on the Windows Server\n
         Grabs the Fullname and packages it into a dict and returns it\n
         Returns dict
         """
+        
+        users_info = {}
         for username in self.get_usernames():
             _stdin,_stdout,_stderr = self.ssh.exec_command(f"net user {username}")
             
-            resp = _stdout.read().decode().split()
-            # resp = _stdout.read().decode().splitlines()
-            print(resp)
-        pass
+            resp = _stdout.read().decode().splitlines()
+
+            usr = resp[0].split()
+            fullname = resp[1].split()
+
+            if(len(fullname) > 2):
+                fn = ""
+                for i  in fullname[2:]:
+                    fn = f"{fn} {i}"
+                users_info[usr[2]] = fn
+            else:
+                users_info[usr[2]] = "No fullname"
+            
+        print(users_info)
+        return users_info
+
 
     def connect(self):
         """
@@ -90,9 +106,11 @@ class WinServer():
         except:
             self.logger.log(f"Error attempting ssh.connect(): hostname {self.env.win_ssh_host}")
 
+
     def __enter__(self):
         self.connect()
         return self
+
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
