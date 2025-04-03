@@ -55,7 +55,6 @@ class RocketChatSV():
                     users_list.append(user_info)
                     user_info = {}
         else:
-            pass
             self.logger.error(f"Error fetching users {response}")
         return users_list
 

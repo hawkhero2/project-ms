@@ -1,4 +1,5 @@
 from lib.globals_vars import ENV, LOGFILE, LOGS_FORMAT
+from sqlite.database import DatabaseManageer
 from paramiko import SSHClient
 import logging
 
@@ -40,7 +41,6 @@ class WinServer():
         Grabs the Fullname and packages it into a dict and returns it\n
         Returns dict
         """
-        
         users_info = {}
         for username in self.get_usernames():
             _stdin,_stdout,_stderr = self.ssh.exec_command(f"net user {username}")
@@ -78,8 +78,15 @@ class WinServer():
 
         return self
 
+    def db_update(self, username, fullname):
+        """Updates the database info for the given user with given parameters"""
 
-    def update_user_info(self, username, fullname, passw=None):
+        if(username != "" and fullname != ""):
+            with DatabaseManageer() as db:
+                db.update_user(win_username=username, win_fullname=fullname)
+        # TODO Learn to log errors using builtin log lib of Textual
+
+    def update_user_info(self, username, fullname=None, passw=None):
         """
         Updates the user's info on Windows Server platform
 
@@ -88,20 +95,26 @@ class WinServer():
 
         """
 
-        ssh = SSHClient()
-        ssh.load_system_host_keys()
-
         try:
-            ssh.connect(hostname=self.env.win_ssh_host,
+            self.ssh.connect(hostname=self.env.win_ssh_host,
                         username=self.env.win_ssh_user,
                         password=self.env.win_ssh_pw)
             self.logger.info(f"SSH sucessfully into : {self.env.win_ssh_host}")
 
-            try:
-                _stdin, _stdout, _stderr = ssh.exec_command(f"powershell net user {username} \"/fullname:{fullname}\"")
-                self.logger.info(f"Updated fullname {fullname} for user : {username}")
-            except:
-                pass
+            if(fullname != ""):
+                try:
+                    _stdin, _stdout, _stderr = self.ssh.exec_command(f"powershell net user {username} /fullname:\"{fullname}\"")
+                    self.logger.info(f"{_stdout}")
+                except:
+                    self.logger.info(f"{_stderr}")
+
+            if(passw != ""):
+                try:
+                    _stdin, _stdout, _stderr = self.ssh.exec_command(f"powershell net user {username} {passw} /expires:never")
+                    self.logger.info(f"{_stdout}")
+                except:
+                    self.logger.info(f"{_stderr}")
+
         
         except:
             self.logger.log(f"Error attempting ssh.connect(): hostname {self.env.win_ssh_host}")

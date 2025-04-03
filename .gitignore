@@ -3,3 +3,4 @@ __pycache__
 users.db
 test.py
 logs.log
+TODO.md

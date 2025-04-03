@@ -6,7 +6,7 @@ class DatabaseManageer():
         """Initialize the database connection"""
 
         # path = "sqlite\\"+db_name
-        self.db_name = "sqlite\\users.db" # For the moment I hardcoded the db, ya I know
+        self.db_name = "sqlite\\users.db" # TODO For the moment I hardcoded the db, ya I know
         self.conn = None
         self.cursor = None
 
@@ -23,9 +23,42 @@ class DatabaseManageer():
             self.cursor.close()
             self.conn.close()
 
-    def update_user(self, username, fullname=None, email=None):
-        self.cursor.execute(f"")
-        pass
+    def update_user(self,
+                    ldap_username=None,
+                    ldap_fullname=None,
+                    ldap_email=None,
+                    rocket_username=None,
+                    rocket_fullname=None,
+                    win_username=None,
+                    win_fullname=None):
+        """Updates users info in database based on the params which are not empty\n
+        TODO Not ideal but will suffice for the moment. Will improve later"""
+        
+        if(ldap_username != ""):
+            if(ldap_email != ""):
+                self.cursor.execute(f"""UPDATE users
+                                    SET ldap_fn = \'{ldap_fullname}\'
+                                    WHERE ldap_usr = \'{ldap_username}\';""")
+                self.conn.commit()
+
+            if(ldap_fullname != ""):
+                self.cursor.execute(f"""UPDATE users
+                                    SET ldap_fn =\'{ldap_fullname}\'
+                                    WHERE ldap_usr = \'{ldap_username}\';""")
+                self.conn.commit()
+
+        if(rocket_username != ""):
+            if(rocket_fullname != ""):
+                self.cursor.execute(f"""UPDATE users
+                                    SET rc_fn = \'{rocket_fullname}\'
+                                    WHERE rc_usr = \'{rocket_username}\';""")
+                self.conn.commit()
+        if(win_username != ""):
+            if(win_fullname != ""):
+                self.cursor.execute(f"""UPDATE users
+                                    SET win_fn = \'{win_fullname}\'
+                                    WHERE win_usr = \'{win_username};""")
+                self.conn.commit()
 
     def add_user(self,
                  ldap_username=None,
@@ -36,21 +69,35 @@ class DatabaseManageer():
                  rocket_email=None,
                  win_username=None,
                  win_fullname=None):
-        """Add user to database in users table"""
+        """Add user to database in users table based on the params which are not empty\n
+        I know, this is not the best way to handle it.\n
+        TODO It will do for the moment ... will improve later
+        """
 
-        if(ldap_username is not None):
-            if(ldap_fullname is not None):
+        if(ldap_username != ""):
+            if(ldap_fullname != ""):
                 self.cursor.execute(f"""INSERT INTO users (ldap_usr, ldap_fn, ldap_email)
-                                    VALUES(?, ?, ?)""",(ldap_username, ldap_fullname, ldap_email))
-
-            if(rocket_username is not None):
-                if(rocket_fullname is not None and rocket_email is not None):
-                    self.cursor.execute(f"""INSERT INTO users (rc_usr, rc_fn, rc_email)
-                                        VALUES(?, ?, ?)""",(rocket_username,rocket_fullname,rocket_email))
+                                    VALUES(?, ?, ?)
+                                    ON CONFLICT ({win_username})
+                                    DO NOTHING;""",(ldap_username, ldap_fullname, ldap_email))
                 self.conn.commit()
-        # if(username != "" and fullname != "" and email !=""):
-        #     self.cursor.execute(f"")
-        #     self.conn.commit()
+
+        if(rocket_username != ""):
+            if(rocket_fullname != "" and rocket_email != ""):
+                self.cursor.execute(f"""INSERT INTO users (rc_usr, rc_fn, rc_email)
+                                    VALUES(?, ?, ?)
+                                    ON CONFLICT ({win_username})
+                                    DO NOTHING;""",(rocket_username,rocket_fullname,rocket_email))
+            self.conn.commit()
+
+        if(win_username != ""):
+            if(win_fullname != ""):
+                self.cursor.execute(f"""INSERT INTO users (win_usr, win_fn)
+                                    VALUES(?, ?)
+                                    ON CONFLICT ({win_username})
+                                    DO NOTHING;""", (win_username,win_fullname))
+                self.conn.commit()
+
 
     def create_table(self):
         """Create table in database users.db"""
