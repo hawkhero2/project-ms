@@ -1,8 +1,6 @@
 from textual.app import App, ComposeResult
-from textual.containers import VerticalScroll
 from textual.widgets import Welcome, Static, Header, Footer
 from lib.users_list import Userslist
-from lib.rocket_sv import RocketChatSV
 
 class App5(App):
 
@@ -14,7 +12,7 @@ class App5(App):
         yield Userslist()
         # yield Static("One", classes="box", id="two")
         # yield Static("User Info", classes="box")
-        yield RocketChatSV("User Info Rocket",classes="box")
+        # yield RocketChatSV("User Info Rocket",classes="box")
         yield Static("Account Info", classes="box")
         yield Footer()
 

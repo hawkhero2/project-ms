@@ -58,7 +58,6 @@ class WinServer():
             else:
                 users_info[usr[2]] = "No fullname"
             
-        print(users_info)
         return users_info
 
 
@@ -78,7 +77,8 @@ class WinServer():
 
         return self
 
-    def db_update(self, username, fullname):
+
+    def update_db(self, username, fullname):
         """Updates the database info for the given user with given parameters"""
 
         if(username != "" and fullname != ""):
@@ -86,7 +86,8 @@ class WinServer():
                 db.update_user(win_username=username, win_fullname=fullname)
         # TODO Learn to log errors using builtin log lib of Textual
 
-    def update_user_info(self, username, fullname=None, passw=None):
+
+    def update_user(self, username, fullname=None, passw=None):
         """
         Updates the user's info on Windows Server platform
 

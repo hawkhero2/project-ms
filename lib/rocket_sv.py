@@ -20,16 +20,38 @@ class RocketChatSV():
             self.logger.error(f"Error attempting to connect to RocketChatSV : {self.env.rocket_url}")
             raise ValueError("Failed to connect to RocketChat API") from e
 
-    def db_update(users: list):
+    def update_db(users: list):
         """
         Updates the user info in database based on the list of dicts received
         """
 
+        username = users["username"]
+        name = users["name"]
+        email = users["email"]
+
         with DatabaseManageer() as db:
-            db.add_user()
+            db.update_user(rocket_username=username,
+                           rocket_fullname=name,
+                           email=email)
         pass
 
-    def update_user(self, username, fullname, passw, email):
+    def update_user(self, username, fullname=None, passw=None, email=None):
+        """
+        Updates the user info on the server
+        Cannot receive empty username
+        """
+        # TODO Finish update users func
+
+        if(fullname != ""):
+            self.rocketAPI.users_update()
+            pass
+
+        if(passw != ""):
+            pass
+
+        if(email != ""):
+            pass
+
         pass
 
     def get_users(self) -> list:
@@ -47,8 +69,10 @@ class RocketChatSV():
         if response.ok:
             resp:dict = response.json()
             users = resp.get("users",[])
+            # print(users)
             for itm in users:
                 if "emails" in itm.keys():
+                    user_info["id"] = itm["_id"]
                     user_info["username"] = itm["username"]
                     user_info["name"] = itm["name"]
                     user_info["email"] = itm["emails"][0]["address"]

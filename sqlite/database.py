@@ -46,19 +46,21 @@ class DatabaseManageer():
                                     SET ldap_fn =\'{ldap_fullname}\'
                                     WHERE ldap_usr = \'{ldap_username}\';""")
                 self.conn.commit()
-
+            
         if(rocket_username != ""):
             if(rocket_fullname != ""):
                 self.cursor.execute(f"""UPDATE users
                                     SET rc_fn = \'{rocket_fullname}\'
                                     WHERE rc_usr = \'{rocket_username}\';""")
                 self.conn.commit()
+
         if(win_username != ""):
             if(win_fullname != ""):
                 self.cursor.execute(f"""UPDATE users
                                     SET win_fn = \'{win_fullname}\'
                                     WHERE win_usr = \'{win_username};""")
                 self.conn.commit()
+            
 
     def add_user(self,
                  ldap_username=None,
