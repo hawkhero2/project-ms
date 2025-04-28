@@ -35,6 +35,19 @@ class RocketChatSV():
                            email=email)
         pass
 
+    def get_user_id(self, username:str):
+        """Returns the id of the given username"""
+
+        id = None
+
+        users = self.get_users()
+        for usr in users:
+            if usr["username"] == username:
+                id = usr["id"]
+
+
+        return id
+
     def update_user(self, username, fullname=None, passw=None, email=None):
         """
         Updates the user info on the server
@@ -43,16 +56,13 @@ class RocketChatSV():
         # TODO Finish update users func
 
         if(fullname != ""):
-            self.rocketAPI.users_update()
-            pass
+            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), name=fullname)
+            print(resp.text)
 
         if(passw != ""):
+            # TODO implement and test password changing maybe
+            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), password=passw)
             pass
-
-        if(email != ""):
-            pass
-
-        pass
 
     def get_users(self) -> list:
         """
