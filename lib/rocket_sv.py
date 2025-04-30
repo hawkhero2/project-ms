@@ -53,14 +53,12 @@ class RocketChatSV():
         Updates the user info on the server
         Cannot receive empty username
         """
-        # TODO Finish update users func
 
         if(fullname != ""):
             resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), name=fullname)
             print(resp.text)
 
         if(passw != ""):
-            # TODO implement and test password changing maybe
             resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), password=passw)
             pass
 
