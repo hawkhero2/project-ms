@@ -1,5 +1,5 @@
 from lib.globals_vars import ENV, LOGFILE, LOGS_FORMAT
-from sqlite.database import DatabaseManageer
+from sqlite.database import DatabaseManager
 from paramiko import SSHClient
 import logging
 
@@ -82,7 +82,7 @@ class WinServer():
         """Updates the database info for the given user with given parameters"""
 
         if(username != "" and fullname != ""):
-            with DatabaseManageer() as db:
+            with DatabaseManager() as db:
                 db.update_user(win_username=username, win_fullname=fullname)
         # TODO Learn to log errors using builtin log lib of Textual
 

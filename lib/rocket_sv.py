@@ -1,13 +1,10 @@
 from rocketchat_API.rocketchat import RocketChat
 from lib.globals_vars import LOGFILE, LOGS_FORMAT, ENV
-from sqlite.database import DatabaseManageer
-import logging
+from sqlite.database import DatabaseManager
 
 class RocketChatSV():
 
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        logging.basicConfig(filename=LOGFILE, format=LOGS_FORMAT, level=logging.INFO)
         self.env = ENV()
         self.rocketAPI = None
 
@@ -17,7 +14,6 @@ class RocketChatSV():
             self.rocketAPI = RocketChat(user=self.env.rocket_acc, password=self.env.rocket_pw, server_url=self.env.rocket_url)
             return self.rocketAPI
         except Exception as e:
-            self.logger.error(f"Error attempting to connect to RocketChatSV : {self.env.rocket_url}")
             raise ValueError("Failed to connect to RocketChat API") from e
 
     def update_db(users: list):
@@ -29,7 +25,7 @@ class RocketChatSV():
         name = users["name"]
         email = users["email"]
 
-        with DatabaseManageer() as db:
+        with DatabaseManager() as db:
             db.update_user(rocket_username=username,
                            rocket_fullname=name,
                            email=email)
@@ -45,7 +41,6 @@ class RocketChatSV():
             if usr["username"] == username:
                 id = usr["id"]
 
-
         return id
 
     def update_user(self, username, fullname=None, passw=None, email=None):
@@ -56,11 +51,9 @@ class RocketChatSV():
 
         if(fullname != ""):
             resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), name=fullname)
-            print(resp.text)
 
         if(passw != ""):
             resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), password=passw)
-            pass
 
     def get_users(self) -> list:
         """
@@ -77,7 +70,7 @@ class RocketChatSV():
         if response.ok:
             resp:dict = response.json()
             users = resp.get("users",[])
-            # print(users)
+
             for itm in users:
                 if "emails" in itm.keys():
                     user_info["id"] = itm["_id"]
@@ -87,7 +80,7 @@ class RocketChatSV():
                     users_list.append(user_info)
                     user_info = {}
         else:
-            self.logger.error(f"Error fetching users {response}")
+            print(f"Error : {response.content.decode()}") # TODO Will improve logging of errors 
         return users_list
 
     def __enter__(self):

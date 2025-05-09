@@ -1,6 +1,6 @@
 import sqlite3
 
-class DatabaseManageer():
+class DatabaseManager():
 
     def __init__(self):
         """Initialize the database connection"""
@@ -48,7 +48,7 @@ class DatabaseManageer():
                 self.conn.commit()
             
         if(rocket_username != ""):
-            if(rocket_fullname != ""):
+            if(rocket_fullname != ""): # TODO Need to update email address aswell, because you need unique email address when creating a user
                 self.cursor.execute(f"""UPDATE users
                                     SET rc_fn = \'{rocket_fullname}\'
                                     WHERE rc_usr = \'{rocket_username}\';""")
@@ -77,7 +77,7 @@ class DatabaseManageer():
         """
 
         if(ldap_username != ""):
-            if(ldap_fullname != ""):
+            if(ldap_fullname !="" and ldap_email !=""):
                 self.cursor.execute(f"""INSERT INTO users (ldap_usr, ldap_fn, ldap_email)
                                     VALUES(?, ?, ?)
                                     ON CONFLICT ({win_username})
