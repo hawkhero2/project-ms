@@ -29,7 +29,6 @@ class RocketChatSV():
             db.update_user(rocket_username=username,
                            rocket_fullname=name,
                            email=email)
-        pass
 
     def get_user_id(self, username:str):
         """Returns the id of the given username"""

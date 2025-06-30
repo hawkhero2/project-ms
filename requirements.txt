@@ -1,0 +1,5 @@
+paramiko==3.5.0
+python-dotenv==1.1.0
+rocketchat_API==1.35.0
+rocketchat_API==1.35.1
+textual==3.2.0

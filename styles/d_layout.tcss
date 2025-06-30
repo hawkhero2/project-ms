@@ -1,21 +1,80 @@
-VerticalScroll {
-    row-span: 2;
-}
+/* d_layout.tcss */
 
-Screen {
-    layout: grid;
-    grid-size: 2 2;
-    grid-columns: 25% 75%;
-    grid-rows: 50% 50%;
-}
-
-#two {
-    # column-span: 2;
-    row-span: 2;
-    # tint: magenta 40%;
-}
-
-.box {
+/* Layout containers */
+Horizontal {
     height: 100%;
-    border: solid green;
+    width: 100%;
 }
+
+Sidebar {
+    width: 28;
+    background: $surface-darken-3;
+    color: $text;
+    border: tall $primary;
+    padding: 1 0;
+    min-width: 20;
+    max-width: 32;
+}
+
+MainPanel {
+    background: $surface;
+    color: $text;
+    padding: 2 2;
+    width: 1fr;
+    height: 100%;
+    layout: vertical;
+}
+
+UserDetails {
+    background: $boost;
+    border: round $primary;
+    padding: 2 2;
+    margin-bottom: 1;
+    min-height: 12;
+    max-height: 16;
+    layout: vertical;
+}
+
+MiscInfo {
+    background: $panel;
+    border: round $secondary;
+    padding: 1 2;
+    min-height: 6;
+    layout: vertical;
+}
+
+/* Widgets */
+Button {
+    background: $accent;
+    color: $text;
+    border: round $accent-darken-1;
+    margin: 0 1 1 1;
+    padding: 0 2;
+}
+
+Button.-active, Button:focus {
+    background: $accent-lighten-1;
+    color: $text;
+    border: round $accent;
+}
+
+Input {
+    background: $surface-lighten-1;
+    color: $text;
+    border: round $primary;
+    padding: 0 1;
+    margin-bottom: 1;
+}
+
+Static {
+    color: $text-muted;
+    margin-bottom: 0;
+    padding: 0 0 0 0;
+}
+
+/* Scrollbar for sidebar */
+Sidebar > VerticalScroll {
+    scrollbar-color: $primary $surface-darken-3;
+    scrollbar-size: 2 3;
+}
+

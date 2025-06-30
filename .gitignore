@@ -6,3 +6,4 @@ logs.log
 TODO.md
 output_ldap
 output_ldap_posixAccount
+database.db
