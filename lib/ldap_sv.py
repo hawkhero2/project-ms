@@ -142,7 +142,7 @@ class LdapServer():
                                 print(f"Printing from inside the mail condition :{item} \n")
                                 user["email"] = item.split(":")[1].strip()
                     if user:
-                        users.append(user) 
+                        users.append(user)
                         print(user)
 
             except Exception as e: # TODO Write proper try-catching
