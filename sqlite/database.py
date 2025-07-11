@@ -34,32 +34,66 @@ class DatabaseManager():
         """Updates users info in database based on the params which are not empty\n
         TODO Not ideal but will suffice for the moment. Will improve later"""
         
-        if(ldap_username != ""):
-            if(ldap_email != ""):
-                self.cursor.execute(f"""UPDATE ldap_users
-                                    SET ldap_fn = \'{ldap_fullname}\'
-                                    WHERE ldap_usr = \'{ldap_username}\';""")
-                self.conn.commit()
-                
+        if ldap_username:
+            self.cursor.execute(
+                "SELECT 1 FROM ldap_users WHERE ldap_usr = ?",
+                (ldap_username,)
+            )
 
-            if(ldap_fullname != ""):
-                self.cursor.execute(f"""UPDATE ldap_users
-                                    SET ldap_fn =\'{ldap_fullname}\'
-                                    WHERE ldap_usr = \'{ldap_username}\';""")
-                self.conn.commit()
-            
+            exists = self.cursor.fetchone()
+
+            if exists:
+                if(ldap_email != ""):
+                    self.cursor.execute(f"""UPDATE ldap_users
+                                        SET ldap_fn = \'{ldap_fullname}\'
+                                        WHERE ldap_usr = \'{ldap_username}\';""")
+                    self.conn.commit()
+
+                if(ldap_fullname != ""):
+                    self.cursor.execute(f"""UPDATE ldap_users
+                                        SET ldap_fn =\'{ldap_fullname}\'
+                                        WHERE ldap_usr = \'{ldap_username}\';""")
+                    self.conn.commit()
+            else:
+                self.add_user(ldap_usr=ldap_username,
+                              ldap_fn=ldap_fullname,
+                              ldap_email=ldap_email)
+            self.conn.commit()
+        
         if(rocket_username != ""):
-            if(rocket_fullname != ""): # TODO Need to update email address aswell, because you need unique email address when creating a user
-                self.cursor.execute(f"""UPDATE rocket_users
-                                    SET rc_fn = \'{rocket_fullname}\'
-                                    WHERE rc_usr = \'{rocket_username}\';""")
-                self.conn.commit()
+            self.cursor.execute(
+                "SELECT 1 FROM rocket_users WHERE rc_usr = ?",
+                (rocket_fullname,)
+                )
+
+            exists = self.cursor.fetchone()
+
+            if exists:
+                if(rocket_fullname != ""): # TODO Need to update email address aswell, because you need unique email address when creating a user
+                    self.cursor.execute("UPDATE rocket_users SET rc_fn = ? WHERE rc_usr = ?",
+                                        (rocket_fullname, rocket_username)
+                                        )
+                    
+            else:
+                self.add_user(rc_usr=rocket_username,
+                              rc_fn=rocket_fullname)
+            self.conn.commit()
 
         if(win_username != ""):
-            if(win_fullname != ""):
-                self.cursor.execute(f"""UPDATE win_users
-                                    SET win_fn = \'{win_fullname}\'
-                                    WHERE win_usr = \'{win_username};""")
+            self.cursor.execute("SELECT 1 FROM win_users WHJERE win_usr = ?",
+                                (win_username,)
+                                )
+            exists = self.cursor.fetchone()
+
+            if exists:
+                if(win_fullname != ""):
+                    self.cursor.execute("UPDATE win_users SET win_fn = ? WHERE win_usr = ?",
+                                        (win_fullname, win_username)
+                                        )
+                else:
+                    self.add_user(win_usr=win_username,
+                                  win_fn=win_fullname)
+
                 self.conn.commit()
             
     def get_users(self)->list: # TODO refactor to work with new database
@@ -144,13 +178,13 @@ class DatabaseManager():
 
         if(rc_usr != None):
             if(rc_fn!= None and rc_email != None):
-                self.cursor.execute(f"""INSERT INTO users (rc_usr, rc_fn, rc_email)
+                self.cursor.execute(f"""INSERT INTO rocket_users (rc_usr, rc_fn, rc_email)
                                     VALUES(?, ?, ?);""",(rc_usr, rc_fn, rc_email))
                 self.conn.commit()
 
         if(win_usr != None):
             if(win_fn != None):
-                self.cursor.execute(f"""INSERT INTO users (win_usr, win_fn)
+                self.cursor.execute(f"""INSERT INTO win_users (win_usr, win_fn)
                                     VALUES(?, ?);""", (win_usr, win_fn))
                 self.conn.commit()
 
@@ -247,7 +281,9 @@ class DatabaseManager():
         Empties the users table so we can work with an empty canvas.\n
         Will probably use it mostly in dev
         """
-        self.cursor.execute(f"DELETE FROM users;") # No error handling atm
+        self.cursor.execute(f"DELETE FROM ldap_users;") # No error handling atm
+        self.cursor.execute(f"DELETE FROM rocket_users;") # No error handling atm
+        self.cursor.execute(f"DELETE FROM win_users;") # No error handling atm
         self.conn.commit()
 
     def delete_table(self, table_name):

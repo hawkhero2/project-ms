@@ -10,6 +10,7 @@ class Sidebar(VerticalScroll):
             yield Button(user, id=f"user-{user}")
 
 class UserDetails(Vertical):
+
     def compose(self):
         yield Static("Username:")
         yield Input(placeholder="Username", id="username")
@@ -22,17 +23,20 @@ class UserDetails(Vertical):
         yield Button("Set Password", id="set-password")
 
 class MiscInfo(Vertical):
+
     def compose(self):
         yield Static("Created: ...")
         yield Static("Last Modified: ...")
         yield Static("Disabled: ...")
 
 class MainPanel(Vertical):
+
     def compose(self):
         yield UserDetails()
         yield MiscInfo()
 
 class UserManagerApp(App):
+
     CSS_PATH = "styles/d_layout.tcss"
 
     def compose(self) -> ComposeResult:

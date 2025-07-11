@@ -18,4 +18,6 @@ class User():
         self.win_name = win_name
 
     def __str__(self):
-        print(f"ldap username: {self.ldap_usr}, ldap name: {self.ldap_name}, rocket user: {self.rocket_usr}, rocket name: {self.rocket_name}, windows user: {self.win_usr}, windows name: {self.win_name}")
+        print(f"ldap username: {self.ldap_usr}, ldap name: {self.ldap_name}, "+
+              f"rocket user: {self.rocket_usr}, rocket name: {self.rocket_name},"+
+              f" windows user: {self.win_usr}, windows name: {self.win_name}")

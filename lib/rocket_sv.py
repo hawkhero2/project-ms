@@ -9,9 +9,11 @@ class RocketChatSV():
         self.rocketAPI = None
 
     def connect(self):
-        """Connect to the RocketChat API"""
+        "Connect to the RocketChat API"
         try:
-            self.rocketAPI = RocketChat(user=self.env.rocket_acc, password=self.env.rocket_pw, server_url=self.env.rocket_url)
+            self.rocketAPI = RocketChat(user=self.env.rocket_acc, 
+                                        password=self.env.rocket_pw, 
+                                        server_url=self.env.rocket_url)
             return self.rocketAPI
         except Exception as e:
             raise ValueError("Failed to connect to RocketChat API") from e
@@ -53,6 +55,7 @@ class RocketChatSV():
 
         if(passw != ""):
             resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), password=passw)
+        # TODO Finish update logic
 
     def get_users(self) -> list:
         """
@@ -79,7 +82,7 @@ class RocketChatSV():
                     users_list.append(user_info)
                     user_info = {}
         else:
-            print(f"Error : {response.content.decode()}") # TODO Will improve logging of errors 
+            print(f"Error : {response.content.decode()}") 
         return users_list
 
     def __enter__(self):
