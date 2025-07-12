@@ -43,16 +43,16 @@ class DatabaseManager():
             exists = self.cursor.fetchone()
 
             if exists:
-                if(ldap_email != ""):
-                    self.cursor.execute(f"""UPDATE ldap_users
-                                        SET ldap_fn = \'{ldap_fullname}\'
-                                        WHERE ldap_usr = \'{ldap_username}\';""")
+                if ldap_email:
+                    self.cursor.execute("UPDATE ldap_users SET ldap_email = ? WHERE ldap_usr = ?",
+                                        (ldap_email,ldap_username)
+                                        )
                     self.conn.commit()
 
-                if(ldap_fullname != ""):
-                    self.cursor.execute(f"""UPDATE ldap_users
-                                        SET ldap_fn =\'{ldap_fullname}\'
-                                        WHERE ldap_usr = \'{ldap_username}\';""")
+                if ldap_fullname:
+                    self.cursor.execute("UPDATE ldap_users SET ldap_fn = ? WHERE ldap_usr = ?",
+                                        (ldap_fullname, ldap_username)
+                                        )
                     self.conn.commit()
             else:
                 self.add_user(ldap_usr=ldap_username,
@@ -60,7 +60,7 @@ class DatabaseManager():
                               ldap_email=ldap_email)
             self.conn.commit()
         
-        if(rocket_username != ""):
+        if rocket_username :
             self.cursor.execute(
                 "SELECT 1 FROM rocket_users WHERE rc_usr = ?",
                 (rocket_fullname,)
@@ -69,7 +69,7 @@ class DatabaseManager():
             exists = self.cursor.fetchone()
 
             if exists:
-                if(rocket_fullname != ""): # TODO Need to update email address aswell, because you need unique email address when creating a user
+                if rocket_fullname:
                     self.cursor.execute("UPDATE rocket_users SET rc_fn = ? WHERE rc_usr = ?",
                                         (rocket_fullname, rocket_username)
                                         )
@@ -79,14 +79,14 @@ class DatabaseManager():
                               rc_fn=rocket_fullname)
             self.conn.commit()
 
-        if(win_username != ""):
+        if win_username:
             self.cursor.execute("SELECT 1 FROM win_users WHJERE win_usr = ?",
                                 (win_username,)
                                 )
             exists = self.cursor.fetchone()
 
             if exists:
-                if(win_fullname != ""):
+                if win_fullname:
                     self.cursor.execute("UPDATE win_users SET win_fn = ? WHERE win_usr = ?",
                                         (win_fullname, win_username)
                                         )
