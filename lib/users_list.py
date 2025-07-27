@@ -1,8 +1,6 @@
 from textual.containers import VerticalScroll
 from textual.widgets import Static
-from lib.ldap_sv import LdapServer
-from lib.win_sv import WinServer
-from lib.rocket_sv import RocketChatSV
+from lib import RocketChatSV, LdapServer, WinServer, User
 from sqlite.database import DatabaseManager
 
 class Userslist(VerticalScroll):
