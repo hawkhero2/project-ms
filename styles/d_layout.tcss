@@ -1,80 +1,168 @@
-/* d_layout.tcss */
+# /* d_layout.tcss */
 
-/* Layout containers */
-Horizontal {
-    height: 100%;
-    width: 100%;
+# /* Layout containers */
+# Horizontal {
+#     height: 100%;
+#     width: 100%;
+# }
+
+# Sidebar {
+#     width: 28;
+#     background: $surface-darken-3;
+#     color: $text;
+#     border: tall $primary;
+#     padding: 1 0;
+#     min-width: 20;
+#     max-width: 32;
+# }
+
+# MainPanel {
+#     background: $surface;
+#     color: $text;
+#     padding: 2 2;
+#     width: 1fr;
+#     height: 100%;
+#     layout: vertical;
+# }
+
+# UserDetails {
+#     background: $boost;
+#     border: round $primary;
+#     padding: 2 2;
+#     margin-bottom: 1;
+#     min-height: 12;
+#     max-height: 16;
+#     layout: vertical;
+# }
+
+# MiscInfo {
+#     background: $panel;
+#     border: round $secondary;
+#     padding: 1 2;
+#     min-height: 6;
+#     layout: vertical;
+# }
+
+# /* Widgets */
+# Button {
+#     background: $accent;
+#     color: $text;
+#     border: round $accent-darken-1;
+#     margin: 0 1 1 1;
+#     padding: 0 2;
+# }
+
+# Button.-active, Button:focus {
+#     background: $accent-lighten-1;
+#     color: $text;
+#     border: round $accent;
+# }
+
+# Input {
+#     background: $surface-lighten-1;
+#     color: $text;
+#     border: round $primary;
+#     padding: 0 1;
+#     margin-bottom: 1;
+# }
+
+# Static {
+#     color: $text-muted;
+#     margin-bottom: 0;
+#     padding: 0 0 0 0;
+# }
+
+# /* Scrollbar for sidebar */
+# Sidebar > VerticalScroll {
+#     scrollbar-color: $primary $surface-darken-3;
+#     scrollbar-size: 2 3;
+# }
+
+/* Dracula-inspired theme for Project-MS
+    Generated with GPT 5 */
+
+/* Global defaults */
+* {
+    background: #282a36; /* Dracula background */
+    color: #f8f8f2;      /* Dracula foreground */
+    border: none;
 }
 
+/* Sidebar (user list) */
 Sidebar {
-    width: 28;
-    background: $surface-darken-3;
-    color: $text;
-    border: tall $primary;
-    padding: 1 0;
-    min-width: 20;
-    max-width: 32;
+    width: 25%;
+    background: #1e1f29; /* Slightly darker for contrast */
+    border-right: solid #44475a;
+    padding: 1;
 }
 
-MainPanel {
-    background: $surface;
-    color: $text;
-    padding: 2 2;
-    width: 1fr;
-    height: 100%;
-    layout: vertical;
-}
-
-UserDetails {
-    background: $boost;
-    border: round $primary;
-    padding: 2 2;
-    margin-bottom: 1;
-    min-height: 12;
-    max-height: 16;
-    layout: vertical;
-}
-
-MiscInfo {
-    background: $panel;
-    border: round $secondary;
+/* Sidebar buttons */
+Sidebar Button {
+    background: #44475a;
+    color: #f8f8f2;
+    border: none;
     padding: 1 2;
-    min-height: 6;
-    layout: vertical;
+    margin: 0 0 1 0;
 }
 
-/* Widgets */
-Button {
-    background: $accent;
-    color: $text;
-    border: round $accent-darken-1;
-    margin: 0 1 1 1;
-    padding: 0 2;
+Sidebar Button:hover {
+    background: #6272a4; /* Dracula purple */
+    color: #f8f8f2;
 }
 
-Button.-active, Button:focus {
-    background: $accent-lighten-1;
-    color: $text;
-    border: round $accent;
+/* Main panel */
+MainPanel {
+    background: #282a36;
+    padding: 2;
 }
 
-Input {
-    background: $surface-lighten-1;
-    color: $text;
-    border: round $primary;
-    padding: 0 1;
+/* User details section */
+UserDetails {
+    background: #1e1f29;
+    border: solid #44475a;
+    padding: 1;
     margin-bottom: 1;
 }
 
+UserDetails Input {
+    background: #44475a;
+    color: #f8f8f2;
+    border: none;
+    padding: 0 1;
+}
+
+UserDetails Input:focus {
+    background: #6272a4;
+    color: #f8f8f2;
+}
+
+/* Misc info section */
+MiscInfo {
+    background: #1e1f29;
+    border: solid #44475a;
+    padding: 1;
+}
+
+/* Static text widgets */
 Static {
-    color: $text-muted;
-    margin-bottom: 0;
-    padding: 0 0 0 0;
+    color: #bd93f9; /* Dracula purple for labels */
 }
 
-/* Scrollbar for sidebar */
-Sidebar > VerticalScroll {
-    scrollbar-color: $primary $surface-darken-3;
-    scrollbar-size: 2 3;
+/* Buttons in main panel */
+MainPanel Button {
+    background: #50fa7b; /* Dracula green */
+    color: #282a36;
+    border: none;
+    padding: 1 2;
+    margin-top: 1;
 }
 
+MainPanel Button:hover {
+    background: #8be9fd; /* Dracula cyan */
+    color: #282a36;
+}
+
+/* Scrollbars */
+VerticalScroll {
+    scrollbar-color: #6272a4 #1e1f29;
+}

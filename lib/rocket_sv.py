@@ -51,11 +51,16 @@ class RocketChatSV():
         """
 
         if(fullname != ""):
-            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), name=fullname)
+            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username),
+                                                name=fullname)
 
         if(passw != ""):
-            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username), password=passw)
+            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username),
+                                                password=passw)
         # TODO Finish update logic
+        if(email != ""):
+            resp = self.rocketAPI.users_update(user_id=self.get_user_id(username=username),
+                                                emails=email)
 
     def get_users(self) -> list:
         """
