@@ -80,7 +80,7 @@ class DatabaseManager():
             self.conn.commit()
 
         if win_username:
-            self.cursor.execute("SELECT 1 FROM win_users WHJERE win_usr = ?",
+            self.cursor.execute("SELECT 1 FROM win_users WHERE win_usr = ?",
                                 (win_username,)
                                 )
             exists = self.cursor.fetchone()
